@@ -1,0 +1,18 @@
+.react-daterange-picker {
+  width: 100%;
+
+  .react-daterange-picker__wrapper {
+    border-radius: 4px;
+    padding: 4px;
+    border: solid 1px hsl(0, 0%, 80%);
+    .react-daterange-picker__inputGroup {
+      text-align: center;
+    }
+  }
+
+  &--open {
+    .react-daterange-picker__wrapper {
+      border-color: dodgerblue;
+    }
+  }
+}

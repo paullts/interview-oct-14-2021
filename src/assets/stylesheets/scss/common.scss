@@ -1,0 +1,7 @@
+$sizes: 200;
+
+@each $size in $sizes {
+  .w-#{$size} {
+    width: $size * 1px;
+  }
+}
