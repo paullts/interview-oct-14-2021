@@ -1,8 +1,8 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
 
-interface ListItem {
-  title: string;
+export interface ListItem {
+  label: string;
   value: string | number;
   className?: string;
 }
@@ -14,14 +14,14 @@ interface CustomTableProps {
 export default function CovidList(props: CustomTableProps) {
   const { list, title } = props;
   return (
-    <Card style={{ width: '18rem' }}>
+    <Card style={{ width: '25rem' }}>
       <Card.Body>
         <Card.Title>{title}</Card.Title>
         {list.length && (
           <ul>
             {list.map((item) => (
-              <li key={item.title} className={item.className}>
-                {item.title}: {item.value}
+              <li key={item.label} className={item.className}>
+                {item.label}: {item.value}
               </li>
             ))}
           </ul>

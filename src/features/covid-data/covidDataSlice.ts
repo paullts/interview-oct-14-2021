@@ -64,6 +64,22 @@ export const covidDataSlice = createSlice({
     ) => {
       state.error = action.payload.error.message;
     },
+    // fetchCovidCaseAllStatus
+    [fetchCovidCaseAllStatus.pending.toString()]: (state: CountryCovidData) => {
+      state.error = null;
+    },
+    [fetchCovidCaseAllStatus.fulfilled.toString()]: (
+      state: CountryCovidData,
+      action: PayloadAction<any>
+    ) => {
+      return { ...state, error: null, data: action.payload };
+    },
+    [fetchCovidCaseAllStatus.rejected.toString()]: (
+      state: CountryCovidData,
+      action: PayloadAction<{ error: { message: string } }>
+    ) => {
+      state.error = action.payload.error.message;
+    },
   },
 });
 

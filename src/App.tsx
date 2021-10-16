@@ -3,15 +3,15 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from './app/hook';
 
 import CountrySelect from './features/country-select';
-import CovidList from './features/covid-list';
+import CovidList, { ListItem } from './features/covid-list';
 import React, { useMemo, useState } from 'react';
 import CovidDateRangePicker from './features/date-range-picker';
 import { fetchCovidCaseAllStatus } from './features/covid-data/covidDataSlice';
 
 const INFORMATION_LIST = [
-  { key: 'Confirmed', label: 'Total Confirmed', count: 0 },
-  { key: 'Deaths', label: 'Total Deaths', count: 0 },
-  { key: 'Recovered', label: 'Total Recovered', count: 0 },
+  { key: 'Confirmed', label: 'Total Confirmed', value: 0 },
+  { key: 'Deaths', label: 'Total Deaths', value: 0 },
+  { key: 'Recovered', label: 'Total Recovered', value: 0 },
 ];
 
 function App() {
@@ -20,8 +20,6 @@ function App() {
   const { country } = useAppSelector((state) => state.countries);
   const { data } = useAppSelector((state) => state.covidData);
   const [errors, setErrors] = useState({ country: false });
-
-  console.log(data);
 
   const onSearch = () => {
     if (!country) {
@@ -34,17 +32,21 @@ function App() {
   };
 
   const formatedCovidData = useMemo(() => {
-    return INFORMATION_LIST.map((l) => {
+    if (!data.length) return [];
+    const countryName = data[0]['Country'] as string;
+
+    const dataList = INFORMATION_LIST.map((l) => {
       let count = 0;
       data.forEach((row) => {
         // @ts-ignore
         const totalCase = row[l.key];
         count += totalCase;
       });
-      return { ...l, count };
-    });
+      return { ...l, value: count };
+    }) as ListItem[];
+
+    return [countryName, dataList];
   }, [data]);
-  console.log(formatedCovidData);
 
   return (
     <React.Fragment>
@@ -77,14 +79,10 @@ function App() {
           </Col>
         </Row>
         <Row className='mt-4'>
-          {formatedCovidData.length && (
+          {formatedCovidData.length > 0 && (
             <CovidList
-              title='shindo'
-              list={[
-                { title: 'Total confirmed', value: 100 },
-                { title: 'Total Deaths', value: 50 },
-                { title: 'Total Recovered', value: 10 },
-              ]}
+              title={formatedCovidData[0] as string}
+              list={formatedCovidData[1] as ListItem[]}
             />
           )}
         </Row>
