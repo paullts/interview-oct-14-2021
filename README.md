@@ -9,10 +9,8 @@
 2. Run `yarn start` or `npm run start`
 3. Open your browser with url: `http://localhost:3000`
 
-## Third party library that I use in this project
+## TODO
 
-1. bootstrap
-2. react-datepicker
-3. react-redux
-4. react-router-dom
-5. redux-thunk
+[ ] Config Router. <br />
+[ ] Add `country`, `date_from, `date_to` to router. <br />
+[ ] Setup testing and write test case for redux actions and reducers.
