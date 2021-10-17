@@ -11,6 +11,6 @@
 
 ## TODO
 
-[ ] Config Router. <br />
-[ ] Add `country`, `date_from, `date_to` to router. <br />
-[ ] Setup testing and write test case for redux actions and reducers.
+- [x] Config Router. <br />
+- [x] Add `country`, `date_from, `date_to` to router. <br />
+- [ ] Setup testing and write test case for redux actions and reducers.
