@@ -1,52 +1,40 @@
+import React, { useState } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 
 import { useAppDispatch, useAppSelector } from './app/hook';
 
+// features
 import CountrySelect from './features/country-select';
-import CovidList, { ListItem } from './features/covid-list';
-import React, { useMemo, useState } from 'react';
 import CovidDateRangePicker from './features/date-range-picker';
-import { fetchCovidCaseAllStatus } from './features/covid-data/covidDataSlice';
+import DataTable from './features/covid-list';
+import { Loading } from './features/loading';
 
-const INFORMATION_LIST = [
-  { key: 'Confirmed', label: 'Total Confirmed', value: 0 },
-  { key: 'Deaths', label: 'Total Deaths', value: 0 },
-  { key: 'Recovered', label: 'Total Recovered', value: 0 },
-];
+// actions
+import { fetchCovidCaseAllStatus } from './features/covid-list/covidDataSlice';
+import { loadingActions } from './features/loading/loadingSlice';
 
 function App() {
   const dispatch = useAppDispatch();
   const { from, to } = useAppSelector((state) => state.dateRange);
   const { country } = useAppSelector((state) => state.countries);
-  const { data } = useAppSelector((state) => state.covidData);
+  const { loading } = useAppSelector((state) => state.loading);
   const [errors, setErrors] = useState({ country: false });
 
   const onSearch = () => {
+    dispatch(loadingActions.setLoading({ loading: true }));
     if (!country) {
       setErrors({ country: true });
+      dispatch(loadingActions.setLoading({ loading: false }));
       return;
     }
     if (country) {
-      dispatch(fetchCovidCaseAllStatus({ country: country, from, to }));
+      dispatch(fetchCovidCaseAllStatus({ country: country, from, to })).then(
+        () => {
+          dispatch(loadingActions.setLoading({ loading: false }));
+        }
+      );
     }
   };
-
-  const formatedCovidData = useMemo(() => {
-    if (!data.length) return [];
-    const countryName = data[0]['Country'] as string;
-
-    const dataList = INFORMATION_LIST.map((l) => {
-      let count = 0;
-      data.forEach((row) => {
-        // @ts-ignore
-        const totalCase = row[l.key];
-        count += totalCase;
-      });
-      return { ...l, value: count };
-    }) as ListItem[];
-
-    return [countryName, dataList];
-  }, [data]);
 
   return (
     <React.Fragment>
@@ -58,7 +46,7 @@ function App() {
 
       <Container fluid='sm'>
         <Row>
-          <Col xs={4}>
+          <Col sm={12} md={4}>
             <CountrySelect
               name='country'
               placeholder='Enter country name'
@@ -66,25 +54,26 @@ function App() {
               resetError={setErrors}
             />
           </Col>
-          <Col xs={4}>
+          <Col sm={12} md={4} className='xs-mt-2 lg-mt-0'>
             <CovidDateRangePicker />
           </Col>
           <Col
-            xs={12}
+            sm={12}
             className='d-flex justify-content-center align-items-center mt-4'
           >
-            <Button className='w-200' onClick={onSearch}>
+            <Button
+              className='w-200'
+              onClick={onSearch}
+              disabled={loading}
+              variant='primary'
+            >
               Search
+              <Loading className='mx-2' />
             </Button>
           </Col>
         </Row>
         <Row className='mt-4'>
-          {formatedCovidData.length > 0 && (
-            <CovidList
-              title={formatedCovidData[0] as string}
-              list={formatedCovidData[1] as ListItem[]}
-            />
-          )}
+          <DataTable />
         </Row>
       </Container>
     </React.Fragment>

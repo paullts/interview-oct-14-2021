@@ -1,17 +1,18 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../../app/store';
+import { Error } from '../../models';
 import { covidApi } from '../../services';
-import { ILiveCasePerCountry, ICountryStatus } from './../../models/covid';
+import { CovidCaseAllStatus, ICountryStatus } from './../../models/covid';
 
 // Define a type for the slice state
 interface CountryCovidData {
-  data: ILiveCasePerCountry[];
+  data: CovidCaseAllStatus;
   error: any;
 }
 
 // Define the initial state using that type
 const initialState: CountryCovidData = {
-  data: [],
+  data: {} as CovidCaseAllStatus,
   error: null,
 };
 
@@ -46,39 +47,42 @@ export const covidDataSlice = createSlice({
   reducers: {},
   extraReducers: {
     // fetchCountryTotalCovidCase
-    [fetchCountryTotalCovidCase.pending.toString()]: (
-      state: CountryCovidData
-    ) => {
-      state.error = null;
-    },
-    [fetchCountryTotalCovidCase.fulfilled.toString()]: (
-      state: CountryCovidData,
-      action: PayloadAction<ILiveCasePerCountry[]>
-    ) => {
-      state.error = null;
-      state.data = action.payload;
-    },
-    [fetchCountryTotalCovidCase.rejected.toString()]: (
-      state: CountryCovidData,
-      action: PayloadAction<{ error: { message: string } }>
-    ) => {
-      state.error = action.payload.error.message;
-    },
+    // [fetchCountryTotalCovidCase.pending.toString()]: (
+    //   state: CountryCovidData
+    // ) => {
+    //   state.error = null;
+    // },
+    // [fetchCountryTotalCovidCase.fulfilled.toString()]: (
+    //   state: CountryCovidData,
+    //   action: PayloadAction<CovidCaseAllStatus[]>
+    // ) => {
+    //   state.error = null;
+    //   state.data = action.payload;
+    // },
+    // [fetchCountryTotalCovidCase.rejected.toString()]: (
+    //   state: CountryCovidData,
+    //   action: PayloadAction<Error>
+    // ) => {
+    //   state.error = action.payload.message;
+    // },
     // fetchCovidCaseAllStatus
     [fetchCovidCaseAllStatus.pending.toString()]: (state: CountryCovidData) => {
       state.error = null;
     },
     [fetchCovidCaseAllStatus.fulfilled.toString()]: (
       state: CountryCovidData,
-      action: PayloadAction<any>
+      action: PayloadAction<CovidCaseAllStatus[]>
     ) => {
-      return { ...state, error: null, data: action.payload };
+      const allData = action.payload || [];
+      const latestData = allData[allData.length - 1];
+
+      return { ...state, error: null, data: latestData };
     },
     [fetchCovidCaseAllStatus.rejected.toString()]: (
       state: CountryCovidData,
-      action: PayloadAction<{ error: { message: string } }>
+      action: PayloadAction<Error>
     ) => {
-      state.error = action.payload.error.message;
+      state.error = action.payload.message;
     },
   },
 });

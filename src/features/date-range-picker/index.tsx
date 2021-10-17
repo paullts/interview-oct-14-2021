@@ -13,5 +13,15 @@ export default function CovidDateRangePicker() {
 
     dispatch(dateRangeActions.setDate(dateRange));
   };
-  return <CustomDateRangePicker handleChange={handleDateChange} />;
+  return (
+    <React.Fragment>
+      <label htmlFor={'date-range'}>
+        Select date range
+        <CustomDateRangePicker
+          handleChange={handleDateChange}
+          name='date-range'
+        />
+      </label>
+    </React.Fragment>
+  );
 }

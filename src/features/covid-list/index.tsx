@@ -1,32 +1,51 @@
-import React from 'react';
-import { Card } from 'react-bootstrap';
+import React, { memo, useMemo } from 'react';
+import { RowProps } from 'react-bootstrap';
+import { useAppSelector } from '../../app/hook';
+import Table, { HeaderProps } from '../../components/common/Table';
+import { v4 as uuidv4 } from 'uuid';
+import { AppHelper } from '../../helpers';
 
-export interface ListItem {
-  label: string;
-  value: string | number;
-  className?: string;
-}
-interface CustomTableProps {
-  list: ListItem[];
-  title: string;
-}
+const { isObjectEmpty } = AppHelper;
 
-export default function CovidList(props: CustomTableProps) {
-  const { list, title } = props;
-  return (
-    <Card style={{ width: '25rem' }}>
-      <Card.Body>
-        <Card.Title>{title}</Card.Title>
-        {list.length && (
-          <ul>
-            {list.map((item) => (
-              <li key={item.label} className={item.className}>
-                {item.label}: {item.value}
-              </li>
-            ))}
-          </ul>
-        )}
-      </Card.Body>
-    </Card>
-  );
-}
+const HEADER: HeaderProps[] = [
+  {
+    key: 'Confirmed',
+    headerName: 'total confirmed',
+    attrs: { className: 'text-center text-capitalize' },
+  },
+  {
+    key: 'Deaths',
+    headerName: 'total deaths',
+    attrs: { className: 'text-center text-capitalize' },
+  },
+  {
+    key: 'Recovered',
+    headerName: 'total recovered',
+    attrs: { className: 'text-center text-capitalize' },
+  },
+];
+
+const DataTable = memo(() => {
+  const { data } = useAppSelector((state) => state.covidData);
+
+  const rows: Array<RowProps[]> | null = useMemo(() => {
+    const dataList = [];
+    if (isObjectEmpty(data)) return null;
+
+    dataList.push(
+      HEADER.map((col) => ({
+        id: uuidv4(),
+        // @ts-ignore
+        value: data[col.key],
+        attrs: { className: 'text-center' },
+      }))
+    );
+
+    return dataList;
+  }, [data]);
+
+  // @ts-ignore
+  return <Table header={HEADER} rows={rows} />;
+});
+
+export default DataTable;

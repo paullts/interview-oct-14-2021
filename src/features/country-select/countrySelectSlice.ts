@@ -31,7 +31,6 @@ export const fetchCountriesList = createAsyncThunk(
 
 export const countrySlice = createSlice({
   name: 'countries',
-  // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
     setCountry(state: CountrySelectState, action: PayloadAction<string>) {

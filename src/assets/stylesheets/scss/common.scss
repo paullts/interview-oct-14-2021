@@ -1,7 +1,27 @@
-$sizes: 200;
+$sizes: 50, 200;
 
 @each $size in $sizes {
   .w-#{$size} {
-    width: $size * 1px;
+    width: $size * 1px !important;
+  }
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+@media (min-width: 320px) {
+  .xs-mt-2 {
+    margin-top: 0.75rem !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg-mt-0 {
+    margin-top: 0 !important;
   }
 }

@@ -6,10 +6,11 @@ import { useAppSelector } from '../../app/hook';
 
 interface DateRangePickerProps {
   handleChange: (value: Date[]) => void;
+  name: string;
 }
 
 function CustomDateRangePicker(props: DateRangePickerProps) {
-  const { handleChange } = props;
+  const { handleChange, name } = props;
   const { from, to } = useAppSelector((state) => state.dateRange);
   const [value, onChange] = useState([new Date(from), new Date(to)]);
 
@@ -19,9 +20,13 @@ function CustomDateRangePicker(props: DateRangePickerProps) {
   };
 
   return (
-    <div>
-      <DateRangePicker onChange={onDateSelected} value={value} />
-    </div>
+    <DateRangePicker
+      onChange={onDateSelected}
+      value={value}
+      calendarAriaLabel='Toggle calendar'
+      clearAriaLabel='Clear value'
+      name={name}
+    />
   );
 }
 

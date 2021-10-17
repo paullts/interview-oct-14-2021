@@ -24,7 +24,7 @@ function CountrySelect(props: SingleSelectProps) {
   const { defaultValue, name, placeholder, error, resetError } = props;
 
   const dispatch = useAppDispatch();
-  const countries = useAppSelector((state) => state.countries.countries);
+  const { countries } = useAppSelector((state) => state.countries);
 
   // transform response data to SelectOption object
   const options: SelectOption[] = countries.map(({ Slug, Country }) => ({
@@ -62,7 +62,9 @@ function CountrySelect(props: SingleSelectProps) {
 
   return (
     <Fragment>
+      <label htmlFor={name}>Country</label>
       <Select
+        id={name}
         classNamePrefix='select'
         defaultValue={defaultValue}
         isClearable={true}
@@ -70,9 +72,11 @@ function CountrySelect(props: SingleSelectProps) {
         name={name}
         onChange={onChange}
         placeholder={placeholder}
-        options={options}
         styles={customStyles}
+        options={options}
+        noOptionsMessage={() => 'No country found'}
       />
+      {error && <span className='text-danger'>Required field</span>}
     </Fragment>
   );
 }

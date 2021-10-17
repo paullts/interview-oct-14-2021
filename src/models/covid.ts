@@ -4,7 +4,7 @@ export interface ICountriesResponse {
   ISO2: string;
 }
 
-export interface ILiveCasePerCountry {
+export interface CovidCaseAllStatus {
   Active: number;
   City: string;
   CityCode: string;
