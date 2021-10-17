@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // TODO: fix ts-ignore
 //@ts-ignore
 import DateRangePicker from '@wojtekmaj/react-daterange-picker';
@@ -19,6 +19,13 @@ function CustomDateRangePicker(props: DateRangePickerProps) {
     onChange(value);
   };
 
+  useEffect(() => {
+    // set default values when URL have query params
+    if (date_from && date_to) {
+      onChange([new Date(date_from), new Date(date_to)]);
+    }
+  }, [date_from, date_to]);
+
   return (
     <DateRangePicker
       onChange={onDateSelected}
@@ -26,6 +33,7 @@ function CustomDateRangePicker(props: DateRangePickerProps) {
       calendarAriaLabel='Toggle calendar'
       clearAriaLabel='Clear value'
       name={name}
+      format='MM/dd/yyyy'
     />
   );
 }

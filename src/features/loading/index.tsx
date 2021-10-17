@@ -11,7 +11,6 @@ function Loading(props: LoadingProps) {
   const { loading, isOverlayFullScreen } = useAppSelector(
     (state) => state.loading
   );
-  console.log(loading);
 
   if (!loading) return null;
 

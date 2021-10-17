@@ -5,8 +5,6 @@ import Table, { HeaderProps } from '../../components/common/Table';
 import { v4 as uuidv4 } from 'uuid';
 import { AppHelper } from '../../helpers';
 
-const { isObjectEmpty } = AppHelper;
-
 const HEADER: HeaderProps[] = [
   {
     key: 'Confirmed',
@@ -27,25 +25,28 @@ const HEADER: HeaderProps[] = [
 
 const DataTable = memo(() => {
   const { data } = useAppSelector((state) => state.covidData);
+  const { loading } = useAppSelector((state) => state.loading);
 
   const rows: Array<RowProps[]> | null = useMemo(() => {
     const dataList = [];
-    if (isObjectEmpty(data)) return null;
+    if (!data.length) return null;
 
     dataList.push(
-      HEADER.map((col) => ({
-        id: uuidv4(),
-        // @ts-ignore
-        value: data[col.key],
-        attrs: { className: 'text-center' },
-      }))
+      HEADER.map((col) => {
+        const totalCaseByStatus = AppHelper.getTotalCaseByStatus(data, col.key);
+        return {
+          id: uuidv4(),
+          value: totalCaseByStatus,
+          attrs: { className: 'text-center' },
+        };
+      })
     );
 
     return dataList;
   }, [data]);
 
   // @ts-ignore
-  return <Table header={HEADER} rows={rows} />;
+  return <Table header={HEADER} rows={rows} isLoading={loading} />;
 });
 
 export default DataTable;

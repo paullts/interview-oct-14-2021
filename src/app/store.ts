@@ -3,7 +3,7 @@ import { TypedUseSelectorHook, useSelector } from 'react-redux';
 
 // reducers
 import { countrySlice } from '../features/country-select/countrySelectSlice';
-import { covidDataSlice } from '../features/covid-list/covidDataSlice';
+import { covidDataSlice } from '../features/covid-data-table/covidDataSlice';
 import { dateRangeSlice } from '../features/date-range-picker/dateRangePickerSlice';
 import { loadingSlice } from './../features/loading/loadingSlice';
 

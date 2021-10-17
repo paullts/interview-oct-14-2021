@@ -2,17 +2,17 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../../app/store';
 import { Error } from '../../models';
 import { covidApi } from '../../services';
-import { CovidCaseAllStatus, ICountryStatus } from './../../models/covid';
+import { CovidCaseAllStatus, ICountryStatus } from '../../models/covid';
 
 // Define a type for the slice state
 interface CountryCovidData {
-  data: CovidCaseAllStatus;
+  data: CovidCaseAllStatus[];
   error: any;
 }
 
 // Define the initial state using that type
 const initialState: CountryCovidData = {
-  data: {} as CovidCaseAllStatus,
+  data: [],
   error: null,
 };
 
@@ -42,29 +42,9 @@ export const fetchCovidCaseAllStatus = createAsyncThunk(
 
 export const covidDataSlice = createSlice({
   name: 'covidData',
-  // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {},
   extraReducers: {
-    // fetchCountryTotalCovidCase
-    // [fetchCountryTotalCovidCase.pending.toString()]: (
-    //   state: CountryCovidData
-    // ) => {
-    //   state.error = null;
-    // },
-    // [fetchCountryTotalCovidCase.fulfilled.toString()]: (
-    //   state: CountryCovidData,
-    //   action: PayloadAction<CovidCaseAllStatus[]>
-    // ) => {
-    //   state.error = null;
-    //   state.data = action.payload;
-    // },
-    // [fetchCountryTotalCovidCase.rejected.toString()]: (
-    //   state: CountryCovidData,
-    //   action: PayloadAction<Error>
-    // ) => {
-    //   state.error = action.payload.message;
-    // },
     // fetchCovidCaseAllStatus
     [fetchCovidCaseAllStatus.pending.toString()]: (state: CountryCovidData) => {
       state.error = null;
@@ -74,9 +54,8 @@ export const covidDataSlice = createSlice({
       action: PayloadAction<CovidCaseAllStatus[]>
     ) => {
       const allData = action.payload || [];
-      const latestData = allData[allData.length - 1];
 
-      return { ...state, error: null, data: latestData };
+      return { ...state, error: null, data: allData };
     },
     [fetchCovidCaseAllStatus.rejected.toString()]: (
       state: CountryCovidData,

@@ -1,19 +1,18 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../../app/store';
+import { SelectOption } from '../../models/country-select';
 import { covidApi } from '../../services';
 import { ICountriesResponse } from './../../models/covid';
 
-// Define a type for the slice state
 interface CountrySelectState {
   countries: ICountriesResponse[];
-  country: string | null;
+  selectedCountry: SelectOption;
   error: any;
 }
 
-// Define the initial state using that type
 const initialState: CountrySelectState = {
   countries: [],
-  country: null,
+  selectedCountry: { value: '', label: '' },
   error: null,
 };
 
@@ -33,12 +32,14 @@ export const countrySlice = createSlice({
   name: 'countries',
   initialState,
   reducers: {
-    setCountry(state: CountrySelectState, action: PayloadAction<string>) {
-      return { ...state, country: action.payload };
+    setSelectedCountry(
+      state: CountrySelectState,
+      action: PayloadAction<SelectOption>
+    ) {
+      return { ...state, selectedCountry: action.payload };
     },
   },
   extraReducers: {
-    // fetchCountriesList
     [fetchCountriesList.pending.toString()]: (state: CountrySelectState) => {
       state.error = null;
     },
@@ -46,14 +47,13 @@ export const countrySlice = createSlice({
       state: CountrySelectState,
       action: PayloadAction<ICountriesResponse[]>
     ) => {
-      state.error = null;
-      state.countries = action.payload;
+      return { ...state, error: null, countries: action.payload };
     },
     [fetchCountriesList.rejected.toString()]: (
       state: CountrySelectState,
       action: PayloadAction<{ error: { message: string } }>
     ) => {
-      state.error = action.payload.error.message;
+      return { ...state, error: action.payload.error.message };
     },
   },
 });

@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import BootStrapTable from 'react-bootstrap/Table';
+import { Loading } from '../../features/loading';
 
 interface ColumnAttributes {
   className?: string;
@@ -19,20 +20,27 @@ export interface RowProps {
 interface TableProps {
   header: HeaderProps[];
   rows: Array<RowProps[]> | null;
+  isLoading?: boolean;
 }
 
-const NoData = ({ colSpan }: { colSpan: number }) => {
+const NoData = ({
+  colSpan,
+  isLoading,
+}: {
+  colSpan: number;
+  isLoading: boolean;
+}) => {
   return (
     <tr>
       <td colSpan={colSpan} className='text-center p-4'>
-        No data matching the filter
+        {isLoading ? <Loading /> : 'No data matching the filter'}
       </td>
     </tr>
   );
 };
 
 export default function Table(props: TableProps) {
-  const { header, rows } = props;
+  const { header, rows, isLoading = false } = props;
   return (
     <BootStrapTable className='table' bordered responsive size='sm'>
       <thead>
@@ -46,7 +54,7 @@ export default function Table(props: TableProps) {
       </thead>
       <tbody>
         {!rows ? (
-          <NoData colSpan={header.length} />
+          <NoData colSpan={header.length} isLoading={isLoading} />
         ) : (
           rows.map((row, idx) => (
             <tr key={idx}>
