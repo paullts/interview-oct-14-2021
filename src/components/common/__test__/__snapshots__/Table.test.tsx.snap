@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders <Table /> with header and empty rows should match the snapshot 1`] = `
+<div>
+  <div
+    class="table-responsive"
+  >
+    <table
+      class="table table table-sm table-bordered"
+    >
+      <thead>
+        <tr>
+          <th
+            class="text-center text-capitalize"
+          >
+            total confirmed
+          </th>
+          <th
+            class="text-center text-capitalize"
+          >
+            total deaths
+          </th>
+          <th
+            class="text-center text-capitalize"
+          >
+            total recovered
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td
+            class="text-center p-4"
+            colspan="3"
+          >
+            No data matching the filter
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+`;
